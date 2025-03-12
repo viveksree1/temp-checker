@@ -25,7 +25,7 @@ jobs:
           
           echo "approvals_count=$APPROVALS_COUNT" >> $GITHUB_OUTPUT
         env:
-          GH_TOKEN: ${{ secrets.GH_MERGE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge if 1 approvals
         if: steps.review_details.outputs.approvals_count == '1' && github.event.pull_request.user.login == 'viveksree1'
