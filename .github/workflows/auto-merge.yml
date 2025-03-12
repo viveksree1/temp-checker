@@ -1,0 +1,29 @@
+name: Auto Merge PRs for bvc-sa-gqe
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Get PR Review Details
+        id: review_details
+        run: |
+          REVIEWS=$(gh pr view ${GITHUB_REF##*/} --json reviews -q '.reviews')
+          APPROVALS_COUNT=$(echo "$REVIEWS" | jq '[.[] | select(.state == "APPROVED")] | length')
+          echo "Total approvals: $APPROVALS_COUNT"
+          echo "::set-output name=approvals_count::$APPROVALS_COUNT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
+
+      - name: Merge if 1 approvals
+        if: steps.review_details.outputs.approvals_count == '1' && github.event.pull_request.user.login == 'viveksree1'
+        run: gh pr merge --auto --squash "${{ github.event.pull_request.html_url }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
