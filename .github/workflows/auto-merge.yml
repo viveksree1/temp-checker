@@ -12,6 +12,8 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Get PR Review Details
         id: review_details
         run: |
