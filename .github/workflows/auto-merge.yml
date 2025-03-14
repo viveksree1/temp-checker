@@ -28,7 +28,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge if 1 approval
-        if: ${{ steps.review_details.outputs.approvals_count == '1' && github.event.pull_request.user.login == 'viveksree1' }}
+        if: ${{ steps.review_details.outputs.approvals_count >= '1' && github.event.pull_request.user.login == 'viveksree1' }}
         run: |
           echo "Merging PR #${{ github.event.pull_request.number }}"
           gh pr merge --auto --squash "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}"
