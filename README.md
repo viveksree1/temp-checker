@@ -1,2 +1,2 @@
 # temp-checker
-Testing with temp files
+Testing with temp files.
