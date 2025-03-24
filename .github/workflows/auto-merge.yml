@@ -12,10 +12,11 @@ jobs:
       contents: write
 
     steps:
-      - name: Merge if 1 approval
-        if: ${{github.event.pull_request.user.login == 'viveksree1' }}
-        run: |
-          echo "Merging PR #${{ github.event.pull_request.number }}"
-          gh pr merge --auto --squash "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}"
+      - name: Merge if PR opened by viveksree1
+        if: ${{ github.event.pull_request.user.login == 'viveksree1' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          echo "Merging PR #$PR_NUMBER created by viveksree1"
+          gh pr merge --auto --squash "$PR_NUMBER" --repo "${{ github.repository }}"
