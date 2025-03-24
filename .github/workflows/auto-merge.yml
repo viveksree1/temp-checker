@@ -1,4 +1,4 @@
-name: Auto Merge PRs for bvc-sa-gqe
+name: Auto Merge PRs for viveksree1
 
 on:
   pull_request_review:
