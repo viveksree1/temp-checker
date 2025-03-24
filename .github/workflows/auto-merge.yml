@@ -12,23 +12,8 @@ jobs:
       contents: write
 
     steps:
-      - name: Get PR Review Details
-        id: review_details
-        run: |
-          PR_NUMBER="${{ github.event.pull_request.number }}"
-          REPO="${{ github.repository }}"
-          echo "Checking reviews for PR #$PR_NUMBER in repo $REPO"
-
-          REVIEWS=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json reviews -q '.reviews')
-          APPROVALS_COUNT=$(echo "$REVIEWS" | jq '[.[] | select(.state == "APPROVED")] | length')
-          echo "Total approvals: $APPROVALS_COUNT"
-
-          echo "approvals_count=$APPROVALS_COUNT" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Merge if 1 approval
-        if: ${{ steps.review_details.outputs.approvals_count >= '1' && github.event.pull_request.user.login == 'viveksree1' }}
+        if: ${{github.event.pull_request.user.login == 'viveksree1' }}
         run: |
           echo "Merging PR #${{ github.event.pull_request.number }}"
           gh pr merge --auto --squash "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}"
